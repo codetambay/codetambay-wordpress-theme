@@ -28,7 +28,7 @@
 
 		<nav id="site-navigation" class="main-navigation navbar navbar-expand-lg navbar-light bg-light" role="navigation">
 			<div class="container">
-				<div class="site-branding">			
+				<div class="site-branding w-lg-250p w-s-md-300p w-max-xs-250p">			
 					<h1>
 						<a class="navbar-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">								
 							<?php
@@ -84,8 +84,8 @@
 					'container'       => 'div',
 					'container_class' => 'collapse navbar-collapse',
 					'container_id'    => 'bs-example-navbar-collapse-1',
-					'menu_class'      => 'navbar-nav mr-auto',
-					'fallback_cb'     => 'WP_Bootstrap_Navwalker::fallback',
+					'menu_class'      => 'navbar-nav ml-auto',//ml-auto position nav-link to right 
+ 					'fallback_cb'     => 'WP_Bootstrap_Navwalker::fallback',
 					'walker'          => new WP_Bootstrap_Navwalker(),
 
 					
