@@ -26,21 +26,22 @@ if ( post_password_required() ) {
 	// You can start editing here -- including this comment!
 	if ( have_comments() ) :
 		?>
-		<h2 class="comments-title">
+		<h2 class="comments-title codetambay-comments-title mb-5">
 			<?php
 			$codetambay_comment_count = get_comments_number();
 			if ( '1' === $codetambay_comment_count ) {
 				printf(
 					/* translators: 1: title. */
-					esc_html__( 'One thought on &ldquo;%1$s&rdquo;', 'codetambay' ),
+					esc_html__( 'One comment on &ldquo;%1$s&rdquo;', 'codetambay' ),
 					'<span>' . get_the_title() . '</span>'
 				);
 			} else {
 				printf( // WPCS: XSS OK.
 					/* translators: 1: comment count number, 2: title. */
-					esc_html( _nx( '%1$s thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', $codetambay_comment_count, 'comments title', 'codetambay' ) ),
+					esc_html( _nx( '%1$s %2$s comments %3$s', '%1$s %2$s comments %3$s', $codetambay_comment_count, 'comments title', 'codetambay' ) ),
+					'<span class="comment-text-wrap"><span data-feather="book-open" class="mr-2">comment icon</span>',
 					number_format_i18n( $codetambay_comment_count ),
-					'<span>' . get_the_title() . '</span>'
+					'<span class="screen-reader-text">on ' . get_the_title() . '</span></span><!-- comment-text-wrap -->'
 				);
 			}
 			?>
@@ -69,7 +70,48 @@ if ( post_password_required() ) {
 
 	endif; // Check for have_comments().
 
-	comment_form();
+	
 	?>
+		<?php 
+			$args = array(
+				'class_form' => 'needs-validation',
+				'fields' => apply_filters(
+					'comment_form_default_fields', array(
+						'author' =>
+							'<p class="comment-form-author">' . 
+							'<input id="author" placeholder="Your Name (No Keywords)" name="author" type="text" value="' .
+							esc_attr( $commenter['comment_author'] ) . '" size="30"' . $aria_req . ' />'.
+							'<label for="author">' . __( 'Your Name', 'codetambay' ) . '</label> ' .
+							( $req ? '<span class="required">*</span>' : '' )  .
+							'</p>'
+							,
+						'email'  => '<p class="comment-form-email">' . '<input id="email" placeholder="your-real-email@example.com" name="email" type="text" value="' . esc_attr(  $commenter['comment_author_email'] ) .
+							'" size="30"' . $aria_req . ' />'  .
+							'<label for="email">' . __( 'Your Email', 'codetambay' ) . '</label> ' .
+							( $req ? '<span class="required">*</span>' : '' ) 
+							.
+							'</p>',
+						'url'    => '<p class="comment-form-url">' .
+						'<input id="url" name="url" placeholder="http://your-site-name.com" type="text" value="' . esc_attr( $commenter['comment_author_url'] ) . '" size="30" /> ' .
+						'<label for="url">' . __( 'Website', 'codetambay' ) . '</label>' .
+						'</p>'
+					)
+				),
+				'comment_field' => 
+					'<div class="comment-form-comment">' .
+					'<label for="comment">' . __( 'Enter comments:' ) . '</label>' .
+					'<textarea class="form-control" id="comment" name="comment" placeholder="Enter an awesome comment here..." cols="45" rows="8" aria-required="true" required></textarea>' .
+					'<div class="invalid-feedback">Please enter comments.</div>' .
+					'</div>',
+				'comment_notes_after' => '',
+				'title_reply' => '<span class="codetambay-text"><span>Your Comments</span></span>'
+			);
+
+			//comment_form(); 
+		?>
+		
+		<?php
+			comment_form($args, $post_id);
+		?>
 
 </div><!-- #comments -->

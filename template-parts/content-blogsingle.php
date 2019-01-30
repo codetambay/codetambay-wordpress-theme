@@ -9,8 +9,11 @@
 
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class("white-bg py-4 px-5 mb-5"); ?>>
-	<header class="entry-header">
+<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+
+    <?php codetambay_post_thumbnail(); ?>
+
+	<header class="entry-header white-bg py-4 px-5">
 		<?php
 		if ( is_singular() ) :
 			the_title( '<h1 class="entry-title">', '</h1>' );
@@ -23,15 +26,14 @@
 			<div class="entry-meta">
 				<?php
 				codetambay_posted_on();
-				codetambay_posted_by();
+                codetambay_posted_by();
+                codetambay_entry_header_codetambay();
 				?>
 			</div><!-- .entry-meta -->
 		<?php endif; ?>
 	</header><!-- .entry-header -->
 
-	<?php codetambay_post_thumbnail(); ?>
-
-	<div class="entry-content">
+	<div class="entry-content white-bg py-4 px-5 mt-0">
 		<?php
 		the_content( sprintf(
 			wp_kses(

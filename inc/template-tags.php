@@ -24,10 +24,13 @@ if ( ! function_exists( 'codetambay_posted_on' ) ) :
 			esc_html( get_the_modified_date() )
 		);
 
+		$posted_on_text = '<span class="screen-reader-text">Posted on</span>';
+
 		$posted_on = sprintf(
 			/* translators: %s: post date. */
-			esc_html_x( 'Posted on %s', 'post date', 'codetambay' ),
-			'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
+			esc_html_x( '%1$s %2$s', 'post date', 'codetambay' ),
+			$posted_on_text,
+			'<a class="codetambay-content-btn" href="' . esc_url( get_permalink() ) . '" rel="bookmark"><span  data-feather="clock" class="mr-2">posted date</span>' . $time_string . '</a>'
 		);
 
 		echo '<span class="posted-on">' . $posted_on . '</span>'; // WPCS: XSS OK.
@@ -42,8 +45,9 @@ if ( ! function_exists( 'codetambay_posted_by' ) ) :
 	function codetambay_posted_by() {
 		$byline = sprintf(
 			/* translators: %s: post author. */
-			esc_html_x( 'by %s', 'post author', 'codetambay' ),
-			'<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
+			esc_html_x( '%1$s %2$s', 'post author', 'codetambay' ),
+			'<span class="screen-reader-text">Written by</span>',
+			'<span class="author vcard"><a class="url fn n codetambay-content-btn mx-1" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '"><span class="mr-2" data-feather="meh">admin icon</span>' . esc_html( get_the_author() ) . '</a></span>'
 		);
 
 		echo '<span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
@@ -56,58 +60,29 @@ if ( ! function_exists( 'codetambay_entry_footer' ) ) :
 	 * Prints HTML with meta information for the categories, tags and comments.
 	 */
 	function codetambay_entry_footer() {
+		
 		// Hide category and tag text for pages.
 		if ( 'post' === get_post_type() ) {
+
+			
 			/* translators: used between list items, there is a space after the comma */
-			$categories_list = get_the_category_list( esc_html__( ', ', 'codetambay' ) );
-			if ( $categories_list ) {
-				/* translators: 1: list of categories. */
-				printf( '<span class="cat-links">' . esc_html__( 'Posted in %1$s', 'codetambay' ) . '</span>', $categories_list ); // WPCS: XSS OK.
-			}
+			//# move to header 
+			// $categories_list = codetambay_get_the_category_list( esc_html__( ' ', 'codetambay' ) );
+			// if ( $categories_list ) {
+			// 	$category_text = '<span class="screen-reader-text">Category</span>';
+			// 	/* translators: 1: list of categories. */
+			// 	printf( '<span class="cat-links">' . esc_html__( '%1$s %2$s', 'codetambay' ) . '</span>', $category_text, $categories_list ); // WPCS: XSS OK.
+			// }
 
 			/* translators: used between list items, there is a space after the comma */
-			$tags_list = get_the_tag_list( '', esc_html_x( ', ', 'list item separator', 'codetambay' ) );
+			$tags_list = get_the_tag_list( '', esc_html_x( ' ', 'list item separator', 'codetambay' ) );
 			if ( $tags_list ) {
+				$tagged_text = '<span class="screen-reader-text">Tagged</span>';
 				/* translators: 1: list of tags. */
-				printf( '<span class="tags-links">' . esc_html__( 'Tagged %1$s', 'codetambay' ) . '</span>', $tags_list ); // WPCS: XSS OK.
+				printf( '<span class="tags-links">' . esc_html__( ' %1$s %2$s', 'codetambay' ) . '</span>', $tagged_text, $tags_list ); // WPCS: XSS OK.
 			}
 		}
 
-		if ( ! is_single() && ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
-			echo '<span class="comments-link">';
-			comments_popup_link(
-				sprintf(
-					wp_kses(
-						/* translators: %s: post title */
-						__( 'Leave a Comment<span class="screen-reader-text"> on %s</span>', 'codetambay' ),
-						array(
-							'span' => array(
-								'class' => array(),
-							),
-						)
-					),
-					get_the_title()
-				)
-			);
-			echo '</span>';
-		}
-
-		edit_post_link(
-			sprintf(
-				wp_kses(
-					/* translators: %s: Name of current post. Only visible to screen readers */
-					__( 'Edit <span class="screen-reader-text">%s</span>', 'codetambay' ),
-					array(
-						'span' => array(
-							'class' => array(),
-						),
-					)
-				),
-				get_the_title()
-			),
-			'<span class="edit-link">',
-			'</span>'
-		);
 	}
 endif;
 
@@ -144,5 +119,67 @@ if ( ! function_exists( 'codetambay_post_thumbnail' ) ) :
 
 		<?php
 		endif; // End is_singular().
+	}
+endif;
+
+// Codetambay custom post content header
+
+if ( ! function_exists( 'codetambay_entry_header_codetambay' ) ) :
+	/**
+	 * Prints HTML with meta information for the comments, and edit link.
+	 */
+	function codetambay_entry_header_codetambay() {
+
+			// Hide category and tag text for pages.
+			if ( 'post' === get_post_type() ) {
+	
+				/* translators: used between list items, there is a space after the comma */
+				$categories_list = codetambay_get_the_category_list( esc_html__( ' ', 'codetambay' ) );
+				if ( $categories_list ) {
+					$category_text = '<span class="screen-reader-text">Category</span>';
+					/* translators: 1: list of categories. */
+					printf( '<span class="cat-links">' . esc_html__( '%1$s %2$s', 'codetambay' ) . '</span>', $category_text, $categories_list ); // WPCS: XSS OK.
+				}
+			}
+		
+
+		if ( ! is_single() && ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
+			echo '<span class="comments-link codetambay-btn-link mx-1">';
+			//echo '<span data-feater="meh">Meh</span>';
+			comments_popup_link(
+				sprintf(
+					wp_kses(
+						/* translators: %s: post title */
+						__( '%1$s Leave a Comment<span class="screen-reader-text"> on %2$s</span>', 'codetambay' ),
+						array(
+							'span' => array(
+								'class' => array(),
+							),
+						)
+					),
+					'<span data-feather="feather">feather</span>',
+					get_the_title()
+				)
+			);
+			echo '</span>';
+		}
+
+		edit_post_link(
+			sprintf(
+				wp_kses(
+					/* translators: %s: Name of current post. Only visible to screen readers */
+					__( '%1$s Edit <span class="screen-reader-text">%2$s</span>', 'codetambay' ),
+					array(
+						'span' => array(
+							'class' => array(),
+						),
+					)
+				),
+				'<span data-feather="edit">Edit</span>',
+				get_the_title()
+			),
+			'<span class="edit-link codetambay-btn-link ml-3">',
+			'</span>'
+		);
 	}
 endif;

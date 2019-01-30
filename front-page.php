@@ -14,8 +14,9 @@
 
 get_header();
 ?>
-
-	<div id="primary" class="content-area">
+<section class="container my-5">
+	<div class="row">
+	<div id="primary" class="content-area col-lg-8">
 		<main id="main" class="site-main">
 
 		<?php
@@ -34,7 +35,14 @@ get_header();
 
 		</main><!-- #main -->
 	</div><!-- #primary -->
-
+	<div class="content-aside col-lg-4">
+			<?php
+			/* <!-- <aside> --> */
+			get_sidebar();
+			?>
+		</div>
+	</div><!-- row -->
+</section><!-- container -->
 <?php
-get_sidebar();
+
 get_footer();

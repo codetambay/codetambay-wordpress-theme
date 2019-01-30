@@ -13,8 +13,8 @@
 
 	</div><!-- #content -->
 
-	<footer id="colophon" class="site-footer">
-		<div class="site-info">
+	<footer id="colophon" class="site-footer my-3 py-3">
+		<div class="site-info text-center">
 			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'codetambay' ) ); ?>">
 				<?php
 				/* translators: %s: CMS name, i.e. WordPress. */
@@ -24,7 +24,7 @@
 			<span class="sep"> | </span>
 				<?php
 				/* translators: 1: Theme name, 2: Theme author. */
-				printf( esc_html__( 'Theme: %1$s by %2$s.', 'codetambay' ), 'codetambay', '<a href="http://codetambay.com">aljun</a>' );
+				printf( esc_html__( 'Coded with %1$s by %2$s.', 'codetambay' ), '&#10084;', '<a href="http://codetambay.com">aljun</a>' );
 				?>
 		</div><!-- .site-info -->
 	</footer><!-- #colophon -->

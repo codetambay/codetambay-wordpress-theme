@@ -149,6 +149,18 @@ function codetambay_scripts() {
 	/* Bootstrap 4 JS */
 	wp_enqueue_script( 'codetambay-bootstrap-4', get_template_directory_uri() . '/module/bootstrap-4/js/bootstrap.js', array('jquery'), '2010415', true ); 
 
+	/* Feather Icons - SVG JS */
+	wp_enqueue_script( 'codetambay-feather-icons', get_template_directory_uri() . '/js/addon/feather.min.js', array(), '2010415', true ); 
+	/*
+		<!-- example icon -->
+		<i data-feather="circle"></i>
+
+		<script>
+			feather.replace()
+		</script>
+	*/
+	wp_enqueue_script( 'codetambay-custom', get_template_directory_uri() . '/js/custom.js', array(), '2010415', true ); 
+	
 
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
@@ -195,3 +207,134 @@ if ( class_exists( 'WooCommerce' ) ) {
 	require get_template_directory() . '/inc/woocommerce.php';
 }
 
+/*
+ * Custo Tags link markup
+ */
+add_filter('the_tags', 'codetambay_get_the_tag_list');
+
+function codetambay_get_the_tag_list($list) {
+    $list = str_replace('rel="tag">', 'rel="tag2" class="codetambay-post-tag" ><span data-feather="tag" class="mr-2">tag</span>', $list);
+    $list = str_replace('</a>', '</a>', $list);
+    return $list;
+}
+
+
+function codetambay_get_the_category_list( $separator = '', $parents = '', $post_id = false ) {
+
+	global $wp_rewrite;
+  
+	$categories = apply_filters( 'the_category_list', get_the_category( $post_id ), $post_id );
+  
+	$rel = ( is_object( $wp_rewrite ) && $wp_rewrite->using_permalinks() ) ? 'rel="category tag"' : 'rel="category"';
+  
+	$thelist = '';
+  
+	  $i = 0;
+	  foreach ( $categories as $category ) {
+		if ( 0 < $i )
+		  $thelist .= $separator;
+		  $thelist .= '<a href="' . get_category_link( $category->term_id ) . ' " class="codetambay-category codetambay-post-category '.$category->class. '" ' . $rel . '><span data-feather="folder-plus" class="mr-2">category</span> ' . $category->name.'</a>';
+		++$i;
+	  }
+  
+	return  $thelist;
+  }
+
+
+/**
+ * Generate custom search form
+ *
+ * Add Bootstrap 4 Markup and style
+ * 
+ * @param string $form Form HTML.
+ * @return string Modified form HTML.
+ */
+function codetambay_search_form( $form ) {
+    $form = '<form role="search" method="get" id="searchform" class="searchform form-inline" action="' . home_url( '/' ) . '" >
+	
+	<div class="input-group col-10 col-lg-8 px-0">
+		<label class="screen-reader-text" for="s">' . __( 'Search for:' ) . '</label>
+    	<input type="text" class="form-control" value="' . get_search_query() . '" name="s" id="s" />
+	</div>
+	<input type="submit" id="searchsubmit" class="col-2 col-lg-4 btn btn-primary btn-search" value="'. esc_attr__( 'Search' ) .'" />
+	
+	</form>';
+ 
+    return $form;
+}
+add_filter( 'get_search_form', 'codetambay_search_form' );
+
+/* 
+ *
+ * Comment Form and Comment layout html markup
+ * 
+ * paste this comment_form($args, $post_id) at comment.php
+ * 
+ */
+
+// Modify comments header text in comments
+
+add_filter( 'codetambay_title_comments', 'child_title_comments');
+function child_title_comments() {
+    return __(comments_number( '<h3>No Responses</h3>', '<h3>1 Response</h3>', '<h3>% Responses...</h3>' ), 'codetambay');
+}
+ 
+// Unset URL from comment form
+function codetambay_comment_below( $fields ) { 
+    $comment_field = $fields['comment']; 
+    unset( $fields['comment'] ); 
+    $fields['comment'] = $comment_field; 
+    return $fields; 
+} 
+add_filter( 'comment_form_fields', 'codetambay_comment_below' ); 
+ 
+// Add placeholder for Name and Email
+function codetambay_comment_form_fields($fields){
+	$fields['author'] = 
+				'<div class="comment-form-author">' . 
+				'<label class="col-12 col-form-label" for="author">' . __( 'Your Name <small><em>(Preferred nickname.)</em></small>', 'codetambay' ) . '</label> ' .
+				'<div class="col-12">' .
+				'<input class="form-control" id="author" placeholder="Name" name="author" type="text" value="' .
+				esc_attr( $commenter['comment_author'] ) . '" size="30"' . $aria_req . ' required />'.
+				'<div class="invalid-feedback">Please provide a name or nickname.</div>' .
+				'</div>'.
+                ( $req ? '<span class="required">*</span>' : '' )  .
+                '</div>';
+	$fields['email'] = 
+				'<div class="comment-form-email">' . 
+				'<label class="col-12 col-form-label" for="email">' . __( 'Your Email <small><em>(we don\'t send spam and this is <strong>not visible to public</strong>.)</em></small>', 'codetambay' ) . '</label> ' .
+				'<div class="col-12">' .
+				'<input class="form-control" id="email" placeholder="your@email.com" name="email" type="text" value="' . esc_attr(  $commenter['comment_author_email'] ) .
+				'" size="30"' . $aria_req . ' required />'  .
+				'<div class="invalid-feedback">Please provide an email. <small>(we don\'t send spam and this is not visible to public.)</small></div>' .
+				'</div>' .
+                ( $req ? '<span class="required">*</span>' : '' ) 
+                 .
+                '</div>';
+	$fields['url'] = 
+				'<div class="comment-form-url">' .
+				'<label class="col-12 col-form-label" for="url">' . __( 'What is your Purpose? <small><em>(Optional and this is <strong>not visible to public</strong>.)</em></small>', 'codetambay' ) . '</label>' .
+				'<div class="col-12">' .
+				'<input class="form-control" id="url" name="url" placeholder="ex: Love this blog (Optional)" type="text" value="' . esc_attr( $commenter['comment_author_url'] ) . '" size="30" /> ' .
+				'<div>' .
+				'</div>';
+    
+    return $fields;
+}
+add_filter('comment_form_default_fields','codetambay_comment_form_fields');
+
+function change_submit_button($submit_field) {
+	$changed_submit = str_replace (
+		'name="submit" type="submit" id="submit"', 
+		'name="submit" value="Submit comment" class="submit btn btn-branding-secondary mt-3" type="submit" id="submit" tabindex = "5"', 
+		$submit_field
+	);
+		return $changed_submit;
+	}
+add_filter('comment_form_submit_field', 'change_submit_button');
+
+// function validate_comment_form(){
+//     ob_start();
+//     comment_form();
+//     echo str_replace('<form','<form attribute="value" ',ob_get_clean());
+// }

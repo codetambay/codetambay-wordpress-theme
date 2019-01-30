@@ -1,6 +1,8 @@
 <?php
 /**
  * Template part for displaying posts
+ * with Bootstrap 4 classes and layout
+ * date: Tue 29 Jan 2019
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
@@ -9,8 +11,11 @@
 
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class("white-bg py-4 px-5 mb-5"); ?>>
-	<header class="entry-header">
+<article id="post-<?php the_ID(); ?>" <?php post_class("mb-5"); ?>>
+
+    <?php codetambay_post_thumbnail(); ?>
+    
+	<header class="entry-header white-bg py-4 px-5">
 		<?php
 		if ( is_singular() ) :
 			the_title( '<h1 class="entry-title">', '</h1>' );
@@ -23,15 +28,14 @@
 			<div class="entry-meta">
 				<?php
 				codetambay_posted_on();
-				codetambay_posted_by();
+                codetambay_posted_by();
+                codetambay_entry_header_codetambay();
 				?>
 			</div><!-- .entry-meta -->
 		<?php endif; ?>
-	</header><!-- .entry-header -->
-
-	<?php codetambay_post_thumbnail(); ?>
-
-	<div class="entry-content">
+    </header><!-- .entry-header -->
+    
+	<div class="entry-content white-bg py-4 px-5 mt-0">
 		<?php
 		the_content( sprintf(
 			wp_kses(
@@ -50,10 +54,12 @@
 			'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'codetambay' ),
 			'after'  => '</div>',
 		) );
-		?>
+        ?>
+
+        <footer class="entry-footer mt-5">
+            <?php codetambay_entry_footer(); ?>
+        </footer><!-- .entry-footer -->        
+    
 	</div><!-- .entry-content -->
 
-	<footer class="entry-footer">
-		<?php codetambay_entry_footer(); ?>
-	</footer><!-- .entry-footer -->
 </article><!-- #post-<?php the_ID(); ?> -->

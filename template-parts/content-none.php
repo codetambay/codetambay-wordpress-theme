@@ -47,5 +47,8 @@
 
 		endif;
 		?>
+		<section class="my-5 py-5 text-center">
+			<h4>Whooopsss <a href="/" title="Zestsay.com">Click to ZestSay Home :)</a></h4>
+		</section>
 	</div><!-- .page-content -->
 </section><!-- .no-results -->

@@ -9,15 +9,16 @@
 
 get_header();
 ?>
-
-	<div id="primary" class="content-area">
+<section class="container my-5">
+	<div class="row">
+	<div id="primary" class="content-area col-lg-8">
 		<main id="main" class="site-main">
 
 		<?php if ( have_posts() ) : ?>
 
 			<header class="page-header">
 				<?php
-				the_archive_title( '<h1 class="page-title">', '</h1>' );
+				the_archive_title( '<h2 class="page-title white-bg py-4 px-5 mb-5">', '</h2>' );
 				the_archive_description( '<div class="archive-description">', '</div>' );
 				?>
 			</header><!-- .page-header -->
@@ -36,7 +37,8 @@ get_header();
 
 			endwhile;
 
-			the_posts_navigation();
+			//the_posts_navigation();
+			codetambay_paging_nav();
 
 		else :
 
@@ -47,7 +49,14 @@ get_header();
 
 		</main><!-- #main -->
 	</div><!-- #primary -->
-
+	<div class="content-aside col-lg-4">
+			<?php
+			/* <!-- <aside> --> */
+			get_sidebar();
+			?>
+		</div>
+	</div><!-- row -->
+</section><!-- container -->
 <?php
-get_sidebar();
+
 get_footer();
