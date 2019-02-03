@@ -47,7 +47,7 @@ if ( ! function_exists( 'codetambay_posted_by' ) ) :
 			/* translators: %s: post author. */
 			esc_html_x( '%1$s %2$s', 'post author', 'codetambay' ),
 			'<span class="screen-reader-text">Written by</span>',
-			'<span class="author vcard"><a class="url fn n codetambay-content-btn mx-1" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '"><span class="mr-2" data-feather="meh">admin icon</span>' . esc_html( get_the_author() ) . '</a></span>'
+			'<span class="author vcard"><a class="url fn n codetambay-content-btn mx-1" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '"><span class="mr-2" data-feather="meh">author icon</span><span class="written-by">Written by</span> <span class="author-name font-weight-bold text-capitalize">' . esc_html( get_the_author() ) . '</span></a></span>'
 		);
 
 		echo '<span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.

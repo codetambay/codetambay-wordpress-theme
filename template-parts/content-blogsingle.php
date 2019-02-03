@@ -13,7 +13,7 @@
 
     <?php codetambay_post_thumbnail(); ?>
 
-	<header class="entry-header white-bg py-4 px-5">
+	<header class="entry-header white-bg py-4 px-3 px-md-5">
 		<?php
 		if ( is_singular() ) :
 			the_title( '<h1 class="entry-title">', '</h1>' );
@@ -33,7 +33,7 @@
 		<?php endif; ?>
 	</header><!-- .entry-header -->
 
-	<div class="entry-content white-bg py-4 px-5 mt-0">
+	<div class="entry-content white-bg py-4 px-3 px-md-5 mt-0">
 		<?php
 		the_content( sprintf(
 			wp_kses(
